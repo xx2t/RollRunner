@@ -9,7 +9,7 @@ public class colorChanger : MonoBehaviour
         rend=this.GetComponent<Renderer>();
     }
     void Update(){
-        if(input.anyKeyDown){
+        if(Input.anyKeyDown){
             rend.material.color=Random.ColorHSV();
         }
     }
