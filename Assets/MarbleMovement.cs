@@ -9,21 +9,27 @@ public class MarbleMovement : MonoBehaviour
     public bool debug = true;
     public int speed = 10;
     GameObject marb;
+    Transform arrowIndicator;
     void Start()
     {
+        arrowIndicator=GameObject.Find("Arrow").transform;
         marb=GameObject.Find("Marb");
         rb=this.GetComponent<Rigidbody>();
     }
     void Update()
     {
         dir.x=Input.acceleration.x;
-        dir.z=Input.acceleration.y;
+        dir.z=Input.acceleration.y*2;
         if(debug){
             Debug.DrawRay(this.transform.position,dir,Color.red,1);
         }
+        arrowIndicator.rotation=Quaternion.LookRotation(dir,Vector3.up);
     }
     void FixedUpdate(){
         rb.AddForce(dir*speed);
-        marb.transform.Rotate(dir);
+        marb.transform.Rotate(dir*speed);
+    }
+    void OnCollisionEnter(Collider other){
+        rb.AddForce(-dir*speed*speed);
     }
 }
