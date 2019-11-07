@@ -10,24 +10,22 @@ public class MarbleMovement : MonoBehaviour
     //Vector3 dirR = Vector3.zero;
     public bool debug = true;
     public int speed = 10;
+    public int jumpSpeed = 50;
     Vector3 calibratedDir;
-    //GameObject marb;
     Transform arrowIndicator;
     int index=1;
-    string currentScene;
-    
+    int currentScene;
+    bool isGrounded;
+    int score;
+    AudioSource aud;
+    public AudioClip coin;
     void Start()
     {
-        currentScene=SceneManager.GetActiveScene().name;
-        if(currentScene=="RollerLvl1"){
-            index=1;
-        }
+        aud=this.GetComponent<AudioSource>();
+        currentScene=SceneManager.GetActiveScene().buildIndex;
+        index=currentScene+1;
         Calibrate();
-        if(PlayerPrefs.GetInt("Index")>0){
-            index=PlayerPrefs.GetInt("Index");
-        }
         arrowIndicator=GameObject.Find("Arrow").transform;
-        //marb=GameObject.Find("Marb");
         rb=this.GetComponent<Rigidbody>();
     }
     public void Calibrate(){
@@ -37,46 +35,41 @@ public class MarbleMovement : MonoBehaviour
     }
     void Update()
     {
-        dir.x=Input.acceleration.x-calibratedDir.x;
-        dir.z=Input.acceleration.y*2-calibratedDir.z;
-        if(dir.x>2){
-            dir.x=2;
+        if(Input.anyKey){
+            dir.x=Input.GetAxis("Horizontal")-calibratedDir.x;
+            dir.z=Input.GetAxis("Vertical")*2-calibratedDir.z;
+        }else{
+            dir.x=Input.acceleration.x-calibratedDir.x;
+            dir.z=Input.acceleration.y*2-calibratedDir.z;
         }
-        if(dir.z>2){
-            dir.z=2;
+        if(dir.x>1){
+            dir.x=1;
         }
-        //dirR.z=Input.acceleration.y*2;
-        //dirR.x=Input.acceleration.x;
+        if(dir.x<-1){
+            dir.x=-1;
+        }
+        if(dir.z>1){
+            dir.z=1;
+        }
+        if(dir.z<-1){
+            dir.z=-1;
+        }
         if(debug){
             Debug.DrawRay(this.transform.position,dir,Color.red,1);
         }
         arrowIndicator.rotation=Quaternion.LookRotation(dir,Vector3.up);
-        if(Input.GetKey(KeyCode.RightArrow)||Input.GetKey(KeyCode.D)){
-            dir.x=1;
-            //dirR.z=1;
-        }
-        if(Input.GetKey(KeyCode.LeftArrow)||Input.GetKey(KeyCode.A)){
-            dir.x=-1;
-            //dirR.z=-1;
-        }
-        if(Input.GetKey(KeyCode.UpArrow)||Input.GetKey(KeyCode.W)){
-            dir.z=1;
-            //dirR.x=1;
-        }
-        if(Input.GetKey(KeyCode.DownArrow)||Input.GetKey(KeyCode.S)){
-            dir.z=-1;
-            //dirR.x=-1;
-        }
         if(Input.GetKeyDown(KeyCode.E)){
             Calibrate();
         }
-    }
-    void FixedUpdate(){
-        rb.AddForce(dir*speed);
-        //marb.transform.Rotate(dirR*speed);
-    }
-    void OnCollisionEnter(Collider other){
-        rb.AddForce(-dir*speed*speed);
+        if(Input.touchCount>0&&isGrounded){
+            Touch touch;
+            touch = Input.GetTouch(0);
+            if(touch.phase == TouchPhase.Began){
+                Jump();
+            }
+        }else if(Input.GetKeyDown(KeyCode.Space)&&isGrounded){
+            Jump();
+        }
     }
     void OnTriggerEnter(Collider other){
         if(other.CompareTag("End")){
@@ -85,5 +78,30 @@ public class MarbleMovement : MonoBehaviour
             index++;
             PlayerPrefs.SetInt("Index",index);
         }
+        if(other.CompareTag("Spikes")){
+            Debug.Log("Hit Spikes");
+            SceneManager.LoadScene(currentScene);
+        }
+        if(other.CompareTag("Coin")){
+            score++;
+            Destroy(other.gameObject);
+            aud.PlayOneShot(coin);
+        }
     }
+    void FixedUpdate(){
+        rb.AddForce(dir*speed);
+    }
+    void OnCollisionEnter(){
+        isGrounded=true;
+    }
+    void OnCollisionStay(){
+        isGrounded=true;
+    }
+    void OnCollisionExit(){
+        isGrounded=false;
+    }
+    void Jump(){
+        rb.AddForce(Vector3.up*jumpSpeed,ForceMode.Impulse);
+    }
+    
 }
