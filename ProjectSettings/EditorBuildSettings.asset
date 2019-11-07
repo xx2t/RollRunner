@@ -8,4 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/RollerLvl1.unity
     guid: 4934c3bc31f3946cab6f8e7838318618
+  - enabled: 1
+    path: Assets/RollerLvl2.unity
+    guid: 8b3eb3359b6b64917a6c6a0abbd7472a
+  - enabled: 1
+    path: Assets/RollerLvl3.unity
+    guid: 697f3b7503d04483dba8bf957c9ccd21
+  - enabled: 1
+    path: Assets/RollerLvl4.unity
+    guid: b62e30b496c544db1ac0c7470f0eb1e1
   m_configObjects: {}
