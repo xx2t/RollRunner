@@ -8,6 +8,8 @@ TagManager:
   - End
   - Spikes
   - Coin
+  - Music
+  - Floor
   layers:
   - Default
   - TransparentFX

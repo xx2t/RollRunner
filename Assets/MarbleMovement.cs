@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.UI;
 
 public class MarbleMovement : MonoBehaviour
 {
@@ -20,17 +21,32 @@ public class MarbleMovement : MonoBehaviour
     int score;
     AudioSource aud;
     public AudioClip coin;
-    TextMeshProUGUI scoreText;
-    void Start()
-    {
-        scoreText=GameObject.Find("ScoreText").GetComponent<TextMeshProUGUI>();
+    Slider scoreLoad;
+    MusicManager mm;
+    int teleports;
+    void Awake(){
+        mm=GameObject.Find("MusicManager").GetComponent<MusicManager>();
+        scoreLoad=GameObject.Find("ScoreLoad").GetComponent<Slider>();
         aud=this.GetComponent<AudioSource>();
-        currentScene=SceneManager.GetActiveScene().buildIndex;
-        index=currentScene+1;
-        Calibrate();
         arrowIndicator=GameObject.Find("Arrow").transform;
         rb=this.GetComponent<Rigidbody>();
-        scoreText.text="0";
+    }
+    void Start()
+    {
+        if(SceneManager.GetActiveScene().buildIndex==0){
+            PlayerPrefs.SetFloat("calx",0);
+            PlayerPrefs.SetFloat("calz",0);
+            calibratedDir.x=0;
+            calibratedDir.z=0;
+            Calibrate();
+        }else if(PlayerPrefs.GetFloat("calx")!=0||PlayerPrefs.GetFloat("calz")!=0){
+            calibratedDir.x=PlayerPrefs.GetFloat("calx");
+            calibratedDir.z=PlayerPrefs.GetFloat("calz");
+        }
+        currentScene=SceneManager.GetActiveScene().buildIndex;
+        index=currentScene+1;
+        scoreLoad.value=0;
+        StartCoroutine(mm.StartNextLevel());
     }
     public void Calibrate(){
         calibratedDir.x=Input.acceleration.x;
@@ -74,14 +90,18 @@ public class MarbleMovement : MonoBehaviour
         }else if(Input.GetKeyDown(KeyCode.Space)&&isGrounded){
             Jump();
         }
-        scoreText.text=""+score;
+        scoreLoad.value=score;
+        if(Input.GetKeyDown(KeyCode.P)&&teleports>0){
+            Teleport();
+        }
     }
     void OnTriggerEnter(Collider other){
         if(other.CompareTag("End")){
             Debug.Log("Level Over");
-            SceneManager.LoadScene(index);
-            index++;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+            index=SceneManager.GetActiveScene().buildIndex+1;
             PlayerPrefs.SetInt("Index",index);
+            
         }
         if(other.CompareTag("Spikes")){
             Debug.Log("Hit Spikes");
@@ -108,5 +128,9 @@ public class MarbleMovement : MonoBehaviour
     void Jump(){
         rb.AddForce(Vector3.up*jumpSpeed,ForceMode.Impulse);
     }
-    
+    void Teleport(){
+        Debug.Log("Teleporting dir = "+dir);
+        Debug.Log("dir.magnitude = "+ dir.magnitude);
+        this.transform.Translate(arrowIndicator.forward*3,Space.World);
+    }
 }
