@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MarbleMovement : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class MarbleMovement : MonoBehaviour
     int score;
     AudioSource aud;
     public AudioClip coin;
+    public TextMeshProUGUI scoreText;
     void Start()
     {
         aud=this.GetComponent<AudioSource>();
@@ -27,6 +29,7 @@ public class MarbleMovement : MonoBehaviour
         Calibrate();
         arrowIndicator=GameObject.Find("Arrow").transform;
         rb=this.GetComponent<Rigidbody>();
+        scoreText.text="0";
     }
     public void Calibrate(){
         calibratedDir.x=Input.acceleration.x;
@@ -70,6 +73,7 @@ public class MarbleMovement : MonoBehaviour
         }else if(Input.GetKeyDown(KeyCode.Space)&&isGrounded){
             Jump();
         }
+        scoreText.text=""+score;
     }
     void OnTriggerEnter(Collider other){
         if(other.CompareTag("End")){
