@@ -20,9 +20,10 @@ public class MarbleMovement : MonoBehaviour
     int score;
     AudioSource aud;
     public AudioClip coin;
-    public TextMeshProUGUI scoreText;
+    TextMeshProUGUI scoreText;
     void Start()
     {
+        scoreText=GameObject.Find("ScoreText").GetComponent<TextMeshProUGUI>();
         aud=this.GetComponent<AudioSource>();
         currentScene=SceneManager.GetActiveScene().buildIndex;
         index=currentScene+1;
