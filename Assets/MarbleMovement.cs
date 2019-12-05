@@ -24,6 +24,9 @@ public class MarbleMovement : MonoBehaviour
     Slider scoreLoad;
     MusicManager mm;
     int teleports;
+    public bool jumpActive = false;
+    public bool teleActive = false;
+    public bool lifeActive = false;
     void Awake(){
         mm=GameObject.Find("MusicManager").GetComponent<MusicManager>();
         scoreLoad=GameObject.Find("ScoreLoad").GetComponent<Slider>();
