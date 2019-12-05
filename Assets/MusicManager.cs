@@ -11,7 +11,6 @@ public class MusicManager : MonoBehaviour
             Destroy(this.gameObject);
         }
         DontDestroyOnLoad(this.gameObject);
-        
     }
     public int mainMenuIndex;
     public int world1Index;

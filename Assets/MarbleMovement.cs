@@ -23,10 +23,13 @@ public class MarbleMovement : MonoBehaviour
     public AudioClip coin;
     Slider scoreLoad;
     MusicManager mm;
-    int teleports;
+    
     public bool jumpActive = false;
     public bool teleActive = false;
     public bool lifeActive = false;
+    int teleports=1;
+    int lives=1;
+    bool abilityUse;
     void Awake(){
         mm=GameObject.Find("MusicManager").GetComponent<MusicManager>();
         scoreLoad=GameObject.Find("ScoreLoad").GetComponent<Slider>();
@@ -84,19 +87,20 @@ public class MarbleMovement : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.E)){
             Calibrate();
         }
-        if(Input.touchCount>0&&isGrounded){
+        if(Input.touchCount>0||Input.GetKeyDown(KeyCode.Space)){
             Touch touch;
             touch = Input.GetTouch(0);
             if(touch.phase == TouchPhase.Began){
-                Jump();
+                abilityUse=true;
             }
-        }else if(Input.GetKeyDown(KeyCode.Space)&&isGrounded){
-            Jump();
+            if(jumpActive&&isGrounded&&abilityUse){
+                Jump();
+                abilityUse=false;
+            }else if(teleActive&&abilityUse){
+                Teleport();
+            }   
         }
         scoreLoad.value=score;
-        if(Input.GetKeyDown(KeyCode.P)&&teleports>0){
-            Teleport();
-        }
     }
     void OnTriggerEnter(Collider other){
         if(other.CompareTag("End")){
@@ -108,16 +112,37 @@ public class MarbleMovement : MonoBehaviour
         }
         if(other.CompareTag("Spikes")){
             Debug.Log("Hit Spikes");
-            SceneManager.LoadScene(currentScene);
+            if(lifeActive&&lives>0){
+                lives--;
+                this.gameObject.GetComponent<Rigidbody>().AddForce(other.transform.up*20, ForceMode.Impulse);
+            }else{
+                SceneManager.LoadScene(currentScene);
+            }
         }
         if(other.CompareTag("Coin")){
             score++;
+            PlayerPrefs.SetInt("Coins",PlayerPrefs.GetInt("Coins")+1);
             Destroy(other.gameObject);
             aud.PlayOneShot(coin);
         }
     }
     void FixedUpdate(){
         rb.AddForce(dir*speed);
+        if(PlayerPrefs.GetInt("ActiveAbility")==1){
+            jumpActive=true;
+        }else{
+            jumpActive=false;
+        }
+        if(PlayerPrefs.GetInt("ActiveAbility")==2){
+            teleActive=true;
+        }else{
+            teleActive=false;
+        }
+        if(PlayerPrefs.GetInt("ActiveAbility")==3){
+            lifeActive=true;
+        }else{
+            lifeActive=false;
+        }
     }
     void OnCollisionEnter(){
         isGrounded=true;
