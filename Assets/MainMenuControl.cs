@@ -14,8 +14,12 @@ public class MainMenuControl : MonoBehaviour
             }else{
                 SceneManager.LoadScene(3);
             }
-        }else{
-            SceneManager.LoadScene(opt-1);
+        }else if (opt==2){
+            SceneManager.LoadScene(1);
+        }else if (opt==3){
+            SceneManager.LoadScene(2);
+        }else if (opt==4){
+            SceneManager.LoadScene(0);
         }
     }
     public void SetActiveAbility(int ability){

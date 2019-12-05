@@ -44,14 +44,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 628d8361ac7df41bdb310a5c30bdcc06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  url:
+  - https://xx2t.github.io/GAAAH/Chill.mp3
+  - https://xx2t.github.io/GAAAH/Deliberate.mp3
+  - https://xx2t.github.io/GAAAH/Lightless.mp3
+  - https://xx2t.github.io/GAAAH/Darkling.mp3
+  audioClips: []
   mainMenuIndex: 0
   world1Index: 3
   world2Index: 7
-  world3Index: 10
-  songs:
-  - {fileID: 8300000, guid: f1bdf4fdade54440d83f050991356c53, type: 3}
-  - {fileID: 8300000, guid: 27ec6c199de3f4d9cb824a56db46816b, type: 3}
-  - {fileID: 8300000, guid: e0e0bf8bf5add4e78add2727d30278e9, type: 3}
+  world3Index: 11
 --- !u!82 &147827323252934280
 AudioSource:
   m_ObjectHideFlags: 0

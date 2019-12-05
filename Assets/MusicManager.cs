@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class MusicManager : MonoBehaviour
 {
+    public List<string> url;
+
+    AudioClip currentClip;
     void Awake(){
         GameObject[] objs=GameObject.FindGameObjectsWithTag("Music");
         if(objs.Length>1){
@@ -16,33 +19,42 @@ public class MusicManager : MonoBehaviour
     public int world1Index;
     public int world2Index;
     public int world3Index;
-
-    public List<AudioClip> songs = new List<AudioClip>();
-    private AudioSource aud;
+    AudioSource aud;
     void Start(){
         aud=this.GetComponent<AudioSource>();
-        aud.clip=songs[0];
         aud.Play();
+        StartCoroutine(StartNextLevel());
     }
     public IEnumerator StartNextLevel(){
         yield return new WaitForSeconds(0.5f);
         int currentIndex= SceneManager.GetActiveScene().buildIndex;
         if(currentIndex==mainMenuIndex){
-            aud.clip=songs[0];
-            aud.Play();
+            using (WWW www = new WWW(url[0])){
+                yield return www;
+                currentClip=www.GetAudioClip();
+            }
+            aud.PlayOneShot(currentClip);
         }
         if(currentIndex==world1Index){
-            aud.clip=songs[1];
-            aud.Play();
+            using (WWW www = new WWW(url[1])){
+                yield return www;
+                currentClip=www.GetAudioClip();
+            }
+            aud.PlayOneShot(currentClip);
         }
         if(currentIndex==world2Index){
-            aud.clip=songs[2];
-            aud.Play();
+            using (WWW www = new WWW(url[2])){
+                yield return www;
+                currentClip=www.GetAudioClip();
+            }
+            aud.PlayOneShot(currentClip);
         }
         if(currentIndex==world3Index){
-            aud.clip=songs[3];
-            aud.Play();
+            using (WWW www = new WWW(url[3])){
+                yield return www;
+                currentClip=www.GetAudioClip();
+            }
+            aud.PlayOneShot(currentClip);
         }
     }
-    
 }

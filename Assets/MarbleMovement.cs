@@ -108,7 +108,7 @@ public class MarbleMovement : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
             index=SceneManager.GetActiveScene().buildIndex+1;
             PlayerPrefs.SetInt("Index",index);
-            
+            PlayerPrefs.SetFloat("Timer",0);
         }
         if(other.CompareTag("Spikes")){
             Debug.Log("Hit Spikes");

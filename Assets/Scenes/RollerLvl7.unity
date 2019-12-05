@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.37312013, g: 0.3807403, b: 0.35872707, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -88,7 +88,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
-  m_LightingDataAsset: {fileID: 112000000, guid: 714a5058adb636643a6cb64cdf77480c,
+  m_LightingDataAsset: {fileID: 112000000, guid: c7ea4b088d6070b478ed1960cab6d8f6,
     type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -3092,6 +3092,9 @@ MonoBehaviour:
   speed: 50
   jumpSpeed: 10
   coin: {fileID: 8300000, guid: be8897927e62247f696ddd54ae0dd5c9, type: 3}
+  jumpActive: 0
+  teleActive: 0
+  lifeActive: 0
 --- !u!135 &379134340
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -16523,6 +16526,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f633ae5a5f684eb1a5363bd180ea02f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jump: {fileID: 0}
+  tele: {fileID: 0}
+  life: {fileID: 0}
 --- !u!65 &1867427715
 BoxCollider:
   m_ObjectHideFlags: 0
